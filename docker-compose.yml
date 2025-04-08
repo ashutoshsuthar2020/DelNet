@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  tile38:
+    image: tile38/tile38
+    container_name: tile38
+    ports:
+      - "9851:9851"
+    restart: always
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    restart: always
+
+  backend:
+    build:
+      context: ./backend # Path to your backend Dockerfile
+    container_name: mapping-container
+    ports:
+      - "8089:8089"
+    network_mode: "host"
+    depends_on:
+      - tile38
+      - mongodb
+    restart: always
